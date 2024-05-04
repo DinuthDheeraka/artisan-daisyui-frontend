@@ -1,14 +1,18 @@
 import './App.css'
-import Navbar from "./components/navbar/Navbar.jsx";
-import ArtworkCard from "./components/artwork-card/ArtworkCard.jsx";
-
+import Navbar from "./components/nav-bar/Navbar.jsx";
+import CardContainer from "./components/card-container/CardContainer.jsx";
+import Footer from "./components/footer/Footer.jsx";
+import PaginationButtonGroup from "./components/pagination-button-group/PaginationButtonGroup.jsx";
 
 function App() {
 
     return (
         <>
             <Navbar/>
-            <ArtworkCard/>
+            <CardContainer/>
+            {/*<ProductOverview/>*/}
+            <PaginationButtonGroup/>
+            <Footer/>
         </>
     )
 }
