@@ -1,18 +1,31 @@
 import './App.css'
-import Navbar from "./components/nav-bar/Navbar.jsx";
-import CardContainer from "./components/card-container/CardContainer.jsx";
-import Footer from "./components/footer/Footer.jsx";
-import PaginationButtonGroup from "./components/pagination-button-group/PaginationButtonGroup.jsx";
+import HomePage from "./pages/home-page/HomePage.jsx";
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import ProductOverviewPage from "./pages/product-overview-page/ProductOverviewPage.jsx";
+import LoginPage from "./pages/login-page/LoginPage.jsx";
+import SignUpPage from "./pages/sign-up-page/SignUpPage.jsx";
+
+const router = createBrowserRouter([
+    {
+        path: '/home', element: <HomePage/>
+    },
+    {
+        path: '/product/*', element: <ProductOverviewPage/>
+    },
+    {
+        path: '/login', element: <LoginPage/>
+    },
+    {
+        path: '/sign-up', element: <SignUpPage/>
+    },
+])
+
 
 function App() {
 
     return (
         <>
-            <Navbar/>
-            <CardContainer/>
-            {/*<ProductOverview/>*/}
-            <PaginationButtonGroup/>
-            <Footer/>
+            <RouterProvider router={router}></RouterProvider>
         </>
     )
 }

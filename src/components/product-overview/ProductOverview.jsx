@@ -1,3 +1,5 @@
+import GooglePayButton from "@google-pay/button-react";
+
 export default function ProductOverview() {
     return (
         <div className="mt-16 flex flex-row container mx-auto justify-items-start justify-start">
@@ -57,7 +59,49 @@ export default function ProductOverview() {
                         Only 1 left
                     </p>
                 </div>
-                <button className="btn btn-active btn-wide btn-neutral rounded text-white mt-5">BUY NOW</button>
+
+                <div className="w-72 h-60 mt-6">
+                    <GooglePayButton
+                        buttonSizeMode={"fill"}
+                        className='w-full'
+                        environment="TEST"
+                        paymentRequest={{
+                            apiVersion: 2,
+                            apiVersionMinor: 0,
+                            allowedPaymentMethods: [
+                                {
+                                    type: 'CARD',
+                                    parameters: {
+                                        allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
+                                        allowedCardNetworks: ['MASTERCARD', 'VISA'],
+                                    },
+                                    tokenizationSpecification: {
+                                        type: 'PAYMENT_GATEWAY',
+                                        parameters: {
+                                            gateway: 'example',
+                                            gatewayMerchantId: 'exampleGatewayMerchantId',
+                                        },
+                                    },
+                                },
+                            ],
+                            merchantInfo: {
+                                merchantId: '12345678901234567890',
+                                merchantName: 'Demo Merchant',
+                            },
+                            transactionInfo: {
+                                totalPriceStatus: 'FINAL',
+                                totalPriceLabel: 'Total',
+                                totalPrice: '100.00',
+                                currencyCode: 'USD',
+                                countryCode: 'US',
+                            },
+                        }}
+                        onLoadPaymentData={paymentRequest => {
+                            console.log('load payment data', paymentRequest);
+                        }}
+                    />
+                </div>
+                {/*<button className="btn btn-active btn-wide btn-neutral rounded text-white mt-5">BUY NOW</button>*/}
             </div>
 
         </div>
