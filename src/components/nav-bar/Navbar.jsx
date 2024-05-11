@@ -1,3 +1,5 @@
+import {Link} from "react-router-dom";
+
 export default function Navbar() {
     return (
         <div className="navbar bg-base-100 outline-gray-300">
@@ -19,33 +21,33 @@ export default function Navbar() {
                             <details>
                                 <summary className="text-sm">Category</summary>
                                 <ul className="p-2">
-                                    <li><a>Submenu 1</a></li>
-                                    <li><a>Submenu 2</a></li>
+                                    <li><a>Sports</a></li>
+                                    <li><a>Performance</a></li>
                                 </ul>
                             </details>
                         </li>
                     </ul>
                 </div>
-                <a className="btn btn-ghost text-xl">daisyUI</a>
+                <Link className="btn btn-ghost text-xl" to={'/home'}>ZOOM</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    <li><a className="text-sm">New</a></li>
-                    <li><a className="text-sm">Men</a></li>
-                    <li><a className="text-sm">Women</a></li>
+                    <li><a className="text-sm font-medium">New</a></li>
+                    <li><a className="text-sm font-medium">Men</a></li>
+                    <li><a className="text-sm font-medium">Women</a></li>
                     <li>
-                        <details>
-                            <summary className="text-sm">Category</summary>
+                        <details className={''}>
+                            <summary className="text-sm font-medium">Category</summary>
                             <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
+                                <li><a>Sports</a></li>
+                                <li><a>Performance</a></li>
                             </ul>
                         </details>
                     </li>
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Login</a>
+                <Link className="btn" to={'/login'}>Login</Link>
             </div>
         </div>
     );
