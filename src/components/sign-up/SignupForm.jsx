@@ -2,6 +2,7 @@ import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import serverURL from "../../config/server-config.js";
+import LoaderButton from "../loader-button/LoaderButton.jsx";
 
 export default function SignupForm() {
 
@@ -9,16 +10,23 @@ export default function SignupForm() {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [homeAddress, setHomeAddress] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+    const [accountType, setSelectedAccountType] = useState('Buyer');
     const navigate = useNavigate();
 
     const handleSignUp = async () => {
         const response = await axios.post(`${serverURL}/user/`, {
-            email, password, phoneNumber, homeAddress
+            email, password, phoneNumber, homeAddress, accountType
         })
+
+        setIsLoading(true);
+
         if (response.data.success) {
+            setIsLoading(false);
             navigate("/home");
         } else {
-            alert('login failed');
+            setIsLoading(false);
+            alert(response.data.message);
         }
     }
 
@@ -42,10 +50,12 @@ export default function SignupForm() {
                             </div>
 
                             <div className="mt-2">
-                                <select className="select select-bordered block w-full">
-                                    <option disabled selected>Who shot first?</option>
-                                    <option>Han Solo</option>
-                                    <option>Greedo</option>
+                                <select className="select select-bordered block w-full" value={accountType}
+                                        onChange={(event) => {
+                                            setSelectedAccountType(event.target.value);
+                                        }}>
+                                    <option value="Seller">Seller</option>
+                                    <option value="Buyer">Buyer</option>
                                 </select>
                             </div>
                         </div>
@@ -138,8 +148,10 @@ export default function SignupForm() {
                         </div>
 
                         <div>
-                            <button type={'button'} className="btn btn-neutral w-full" onClick={handleSignUp}>Sign up
-                            </button>
+                            {isLoading ? <LoaderButton/> :
+                                <button type={'button'} className="btn btn-neutral w-full" onClick={handleSignUp}>Sign
+                                    up
+                                </button>}
                         </div>
                     </form>
 
