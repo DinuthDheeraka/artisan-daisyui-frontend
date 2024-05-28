@@ -15,6 +15,7 @@ export default function SignupForm() {
     const navigate = useNavigate();
 
     const handleSignUp = async () => {
+
         const response = await axios.post(`${serverURL}/user/`, {
             email, password, phoneNumber, homeAddress, accountType
         })
@@ -22,7 +23,17 @@ export default function SignupForm() {
         setIsLoading(true);
 
         if (response.data.success) {
+
             setIsLoading(false);
+
+            alert('Login successful.');
+
+            // put response data in local storage
+            localStorage.setItem("user_data", JSON.stringify({
+                user: response.data.user,
+                tokens: response.data.tokens
+            }));
+
             navigate("/home");
         } else {
             setIsLoading(false);

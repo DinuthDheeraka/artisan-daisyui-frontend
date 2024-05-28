@@ -57,7 +57,7 @@ export default function ProductOverview({id}) {
 
                 <p className={'text-3xl font-medium'}>{product.name}</p>
 
-                <p className={'text-xl font-medium'}>LKR {product.price.toLocaleString()}</p>
+                <p className={'text-xl font-semibold'}>LKR {product.price.toLocaleString()}</p>
 
                 <select className="select select-bordered btn-wide max-w-xs">
                     <option selected>Size {product.size}</option>

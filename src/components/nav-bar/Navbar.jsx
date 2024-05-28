@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 
-export default function Navbar() {
+export default function Navbar({handleFilterChange}) {
 
     const navigate = useNavigate();
 
@@ -39,13 +39,23 @@ export default function Navbar() {
                         </li>
                     </ul>
                 </div>
-                <Link className="btn btn-ghost text-xl" to={'/home'}>ZOOM</Link>
+                <Link className="btn btn-ghost text-xl" to={'/home'} onClick={()=>{
+                    window.location.reload()
+                }}>ZOOM</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
                     <li><a className="text-sm font-medium">New</a></li>
-                    <li><a className="text-sm font-medium">Men</a></li>
-                    <li><a className="text-sm font-medium">Women</a></li>
+                    <li><a className="text-sm font-medium" onClick={() => {
+                        handleFilterChange({
+                            gender: 'Male'
+                        });
+                    }}>Men</a></li>
+                    <li><a className="text-sm font-medium" onClick={() => {
+                        handleFilterChange({
+                            gender: 'Women'
+                        });
+                    }}>Women</a></li>
                     <li>
                         <details className={''}>
                             <summary className="text-sm font-medium">Category</summary>
@@ -74,7 +84,7 @@ export default function Navbar() {
                                 <span className="badge">New</span>
                             </a>
                         </li>
-                        {userData.accountType === "Seller" ? <li>Add product</li> : undefined}
+                        {userData.accountType === "Seller" ? <li><a>Add product</a></li> : undefined}
                         <li><a>Settings</a></li>
                         <li onClick={() => {
                             // Display the confirmation dialog

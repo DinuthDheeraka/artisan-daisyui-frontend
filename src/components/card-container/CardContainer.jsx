@@ -2,14 +2,17 @@ import ProductCard from "../product-card/ProductCard.jsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
 
-export default function CardContainer() {
+// eslint-disable-next-line react/prop-types
+export default function CardContainer({filter}) {
 
     const [products, setProducts] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('http://localhost:9090/api/v1/product');
+                const response = await axios.get('http://localhost:9090/api/v1/product', {
+                    params: filter
+                });
                 setProducts(response.data.data);
             } catch (error) {
                 console.error('Error fetching data:', error);
@@ -18,7 +21,7 @@ export default function CardContainer() {
 
         fetchData().then(r => console.log(r));
 
-    }, []);
+    }, [filter]);
 
     return (
         <div className="container mx-auto p-6">
