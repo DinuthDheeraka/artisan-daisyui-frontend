@@ -1,17 +1,34 @@
 import ProductCard from "../product-card/ProductCard.jsx";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
 export default function CardContainer() {
+
+    const [products, setProducts] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('http://localhost:9090/api/v1/product');
+                setProducts(response.data.data);
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
+
+        fetchData().then(r => console.log(r));
+
+    }, []);
+
     return (
         <div className="container mx-auto p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 items-center">
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/865fdf9e4a4b44e68b808eeb17a103b9_9366/ID2794_HM1.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/71393cd49eda43ce9976b04d4a24464e_9366/ID8410_01_standard.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/1da7c31402154913981daf480093bc87_9366/HP5439_01_standard.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/71393cd49eda43ce9976b04d4a24464e_9366/ID8410_01_standard.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/865fdf9e4a4b44e68b808eeb17a103b9_9366/ID2794_HM1.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/71393cd49eda43ce9976b04d4a24464e_9366/ID8410_01_standard.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/1da7c31402154913981daf480093bc87_9366/HP5439_01_standard.jpg'}/>
-                <ProductCard image={'https://assets.adidas.com/images/w_940,f_auto,q_auto/71393cd49eda43ce9976b04d4a24464e_9366/ID8410_01_standard.jpg'}/>
+                {
+                    // eslint-disable-next-line react/jsx-key
+                    products.map((product) => <ProductCard name={product.name} price={product.price}
+                                                           image={product.img1} category={product.category}
+                                                           id={product._id} key={product._id}/>)
+                }
             </div>
         </div>
     )

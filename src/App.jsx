@@ -4,6 +4,7 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import ProductOverviewPage from "./pages/product-overview-page/ProductOverviewPage.jsx";
 import LoginPage from "./pages/login-page/LoginPage.jsx";
 import SignUpPage from "./pages/sign-up-page/SignUpPage.jsx";
+import ProductAddPage from "./pages/product-add-page/ProductAddPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -17,6 +18,9 @@ const router = createBrowserRouter([
     },
     {
         path: '/sign-up', element: <SignUpPage/>
+    },
+    {
+        path: '/product-save', element: <ProductAddPage/>
     },
 ])
 

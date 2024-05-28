@@ -148,7 +148,7 @@ export default function SignupForm() {
                         </div>
 
                         <div>
-                            {isLoading ? <LoaderButton/> :
+                            {isLoading ? <LoaderButton text={'Loading'}/> :
                                 <button type={'button'} className="btn btn-neutral w-full" onClick={handleSignUp}>Sign
                                     up
                                 </button>}

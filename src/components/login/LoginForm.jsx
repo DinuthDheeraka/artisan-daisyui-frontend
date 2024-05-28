@@ -16,9 +16,17 @@ export default function LoginForm() {
         });
 
         if (response.data.success) {
+            alert('Login successful.');
+
+            // put response data in local storage
+            localStorage.setItem("user_data", JSON.stringify({
+                user: response.data.user,
+                tokens: response.data.tokens
+            }));
+
             navigate("/home");
         } else {
-            alert('login failed');
+            alert(response.data.message);
         }
 
     }

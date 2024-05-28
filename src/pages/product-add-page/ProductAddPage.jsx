@@ -1,8 +1,8 @@
 import Navbar from "../../components/nav-bar/Navbar.jsx";
-import SignupForm from "../../components/sign-up/SignupForm.jsx";
 import Footer from "../../components/footer/Footer.jsx";
+import ProductAddForm from "../../components/product-add-form/ProductAddForm.jsx";
 
-export default function SignUpPage() {
+export default function ProductAddPage() {
     return (
         <div>
 
@@ -11,10 +11,10 @@ export default function SignUpPage() {
             </div>
 
             <div>
-                <SignupForm/>
+                <ProductAddForm/>
             </div>
 
-            <div className={'mt-40'}>
+            <div className={'mt-32'}>
                 <Footer/>
             </div>
 

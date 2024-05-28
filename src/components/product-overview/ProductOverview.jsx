@@ -1,32 +1,43 @@
 import GooglePayButton from "@google-pay/button-react";
+import {useEffect, useState} from "react";
+import axios from "axios";
 
-export default function ProductOverview() {
+// eslint-disable-next-line react/prop-types
+export default function ProductOverview({id}) {
+
+    const [qty, setQTY] = useState(0);
+    const [product, setProduct] = useState({
+        name: '',
+        price: 0,
+        qty: 0,
+        size: 0,
+        desc: '',
+        img1: '',
+        img2: ''
+    })
+
+    useEffect(() => {
+        const findProductById = async () => {
+            const response = await axios.get(`http://localhost:9090/api/v1/product/${id}`);
+            setProduct(response.data.data);
+            setQTY(response.data.data.qty);
+        }
+        findProductById().then(r => console.log(r));
+    }, [id]);
+
     return (
         <div className="mt-16 flex flex-row container mx-auto justify-items-start justify-start">
 
             <div className='w-1/2 h-full flex flex-col gap-4'>
 
-                <div className="carousel w-full rounded" style={{height: '600px'}}>
-                    <div id="slide1" className="carousel-item relative w-full h-full">
-                        <img
-                            src="https://assets.adidas.com/images/w_940,f_auto,q_auto/865fdf9e4a4b44e68b808eeb17a103b9_9366/ID2794_HM1.jpg"
-                            className="w-full h-full" alt={''}/>
-                        <div
-                            className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                            <a href="#slide4" className="btn btn-circle">❮</a>
-                            <a href="#slide2" className="btn btn-circle">❯</a>
-                        </div>
+                <div className="w-full carousel rounded-box" style={{height: '680px'}}>
+                    <div className="carousel-item w-full">
+                        <img src={product.img1}
+                             className="w-full bg-center" alt="Tailwind CSS Carousel component"/>
                     </div>
-
-                    <div id="slide2" className="carousel-item relative w-full">
-                        <img
-                            src="https://assets.adidas.com/images/w_940,f_auto,q_auto/865fdf9e4a4b44e68b808eeb17a103b9_9366/ID2794_HM1.jpg"
-                            className="w-full" alt={''}/>
-                        <div
-                            className="absolute flex justify-between transform -translate-y-1/2 left-5 right-5 top-1/2">
-                            <a href="#slide1" className="btn btn-circle">❮</a>
-                            <a href="#slide2" className="btn btn-circle">❯</a>
-                        </div>
+                    <div className="carousel-item w-full">
+                        <img src={product.img2}
+                             className="w-full" alt="Tailwind CSS Carousel component"/>
                     </div>
                 </div>
 
@@ -36,31 +47,48 @@ export default function ProductOverview() {
                         Product Description
                     </div>
                     <div className="collapse-content">
-                        <p>tabIndex={0} attribute is necessary to make the div focusable</p>
+                        <p>{product.desc}</p>
                     </div>
                 </div>
 
             </div>
 
             <div className='w-1/2 flex flex-col items-start justify-start px-5 gap-6' style={{height: '660px'}}>
-                <p className={'text-3xl font-medium'}>Avryn x Helen Kirkum Shoes</p>
-                <p className={'text-xl font-medium'}>
-                    SLRs 61,500 </p>
+
+                <p className={'text-3xl font-medium'}>{product.name}</p>
+
+                <p className={'text-xl font-medium'}>LKR {product.price.toLocaleString()}</p>
+
                 <select className="select select-bordered btn-wide max-w-xs">
-                    <option disabled selected>Select Size</option>
-                    <option>Han Solo</option>
-                    <option>Greedo</option>
+                    <option selected>Size {product.size}</option>
                 </select>
+
                 <div className='flex flex-row gap-1'>
                     <p className={'font-medium'}>
                         Availability :
                     </p>
                     <p className='font-light'>
-                        Only 1 left
+                        Only {product.qty} left
                     </p>
                 </div>
 
-                <div className="w-72 h-60 mt-6">
+                <div className={'flex flex-row items-center justify-center gap-3.5'}>
+                    <button onClick={() => {
+                        if (qty < product.qty) {
+                            setQTY(prevState => prevState + 1);
+                        }
+                    }} className={'btn btn-sm'}>+
+                    </button>
+                    <p className={'text-sm'}>{qty}</p>
+                    <button onClick={() => {
+                        if (qty > product.qty) {
+                            setQTY(prevState => prevState - 1);
+                        }
+                    }} className={'btn btn-sm'}>-
+                    </button>
+                </div>
+
+                <div className="w-72 h-60 mt-10">
                     <GooglePayButton
                         buttonSizeMode={"fill"}
                         className='w-full'
@@ -101,7 +129,6 @@ export default function ProductOverview() {
                         }}
                     />
                 </div>
-                {/*<button className="btn btn-active btn-wide btn-neutral rounded text-white mt-5">BUY NOW</button>*/}
             </div>
 
         </div>
