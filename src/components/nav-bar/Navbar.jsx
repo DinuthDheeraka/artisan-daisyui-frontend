@@ -1,6 +1,6 @@
 import {Link, useNavigate} from "react-router-dom";
 
-export default function Navbar({handleFilterChange}) {
+export default function Navbar({handleFilterChange, handleIconOnClick}) {
 
     const navigate = useNavigate();
 
@@ -13,7 +13,7 @@ export default function Navbar({handleFilterChange}) {
     const userData = retrievedObject ? retrievedObject.user : null;
 
     return (
-        <div className="navbar bg-base-100 outline-gray-300">
+        <div className="navbar bg-base-100 outline-gray-300 relative z-50">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -39,9 +39,7 @@ export default function Navbar({handleFilterChange}) {
                         </li>
                     </ul>
                 </div>
-                <Link className="btn btn-ghost text-xl" to={'/home'} onClick={()=>{
-                    window.location.reload()
-                }}>ZOOM</Link>
+                <Link className="btn btn-ghost text-xl" to={'/home'} onClick={handleIconOnClick}>ZOOM</Link>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
@@ -59,9 +57,19 @@ export default function Navbar({handleFilterChange}) {
                     <li>
                         <details className={''}>
                             <summary className="text-sm font-medium">Category</summary>
-                            <ul className="p-2">
-                                <li><a>Sports</a></li>
-                                <li><a>Performance</a></li>
+                            <ul className="p-2 w-72">
+                                <li><a onClick={() => {
+                                    handleFilterChange({category: 'Mens Sports'});
+                                }}>Mens Sports</a></li>
+                                <li><a onClick={() => {
+                                    handleFilterChange({category: 'Mens Performance'});
+                                }}>Mens Performance</a></li>
+                                <li><a onClick={() => {
+                                    handleFilterChange({category: 'Women Sports'});
+                                }}>Women Sports</a></li>
+                                <li><a onClick={() => {
+                                    handleFilterChange({category: 'Women Performance'});
+                                }}>Women Performance</a></li>
                             </ul>
                         </details>
                     </li>
@@ -84,7 +92,8 @@ export default function Navbar({handleFilterChange}) {
                                 <span className="badge">New</span>
                             </a>
                         </li>
-                        {userData.accountType === "Seller" ? <li><a>Add product</a></li> : undefined}
+                        {userData.accountType === "Seller" ?
+                            <li><Link to={'/product-save'}>Add product</Link></li> : undefined}
                         <li><a>Settings</a></li>
                         <li onClick={() => {
                             // Display the confirmation dialog

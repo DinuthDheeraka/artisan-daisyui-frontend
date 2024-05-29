@@ -10,8 +10,15 @@ export default function CardContainer({filter}) {
     useEffect(() => {
         const fetchData = async () => {
             try {
+                // get access token
+                const userData = JSON.parse(localStorage.getItem('user_data'));
+                const accessToken = userData.tokens['accessToken'];
+
                 const response = await axios.get('http://localhost:9090/api/v1/product', {
-                    params: filter
+                    params: filter,
+                    headers: {
+                        'Authorization': `bearer ${accessToken}`,
+                    }
                 });
                 setProducts(response.data.data);
             } catch (error) {

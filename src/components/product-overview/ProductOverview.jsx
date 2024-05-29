@@ -18,7 +18,15 @@ export default function ProductOverview({id}) {
 
     useEffect(() => {
         const findProductById = async () => {
-            const response = await axios.get(`http://localhost:9090/api/v1/product/${id}`);
+            // get access token
+            const userData = JSON.parse(localStorage.getItem('user_data'));
+            const accessToken = userData.tokens['accessToken'];
+
+            const response = await axios.get(`http://localhost:9090/api/v1/product/${id}`, {
+                headers: {
+                    'Authorization': `bearer ${accessToken}`,
+                }
+            });
             setProduct(response.data.data);
             setQTY(response.data.data.qty);
         }
@@ -30,7 +38,7 @@ export default function ProductOverview({id}) {
 
             <div className='w-1/2 h-full flex flex-col gap-4'>
 
-                <div className="w-full carousel rounded-box" style={{height: '680px'}}>
+                <div className="w-full carousel rounded-box gap-2" style={{height: '680px'}}>
                     <div className="carousel-item w-full">
                         <img src={product.img1}
                              className="w-full bg-center" alt="Tailwind CSS Carousel component"/>

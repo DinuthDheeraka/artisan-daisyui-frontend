@@ -9,14 +9,16 @@ export default function HomePage() {
     const [filter, setFilter] = useState({category: '', gender: ''})
 
     function handleFilterChange(updatedFilter) {
-        setFilter({...filter, ...updatedFilter});
+        setFilter({...updatedFilter});
     }
 
     return (
         <div>
 
             <div>
-                <Navbar handleFilterChange={handleFilterChange}/>
+                <Navbar handleFilterChange={handleFilterChange} handleIconOnClick={() => {
+                    window.location.reload();
+                }}/>
             </div>
 
             <div>
