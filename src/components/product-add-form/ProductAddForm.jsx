@@ -2,6 +2,8 @@ import {useState} from "react";
 import axios from "axios";
 import serverURL from "../../config/server-config.js";
 import LoaderButton from "../loader-button/LoaderButton.jsx";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function ProductAddForm() {
 
@@ -15,6 +17,15 @@ export default function ProductAddForm() {
     const [fileTwo, setFileTwo] = useState(null);
     const [productCategory, setSelectedProductCategory] = useState('');
     const [productSize, setSelectedSize] = useState('');
+    const MySwal = withReactContent(Swal)
+
+    // Get the JSON string from local storage
+    const retrievedString = localStorage.getItem('user_data');
+
+    // Convert the JSON string back to an object
+    const retrievedObject = JSON.parse(retrievedString);
+
+    const accessToken = retrievedObject ? retrievedObject.tokens.accessToken : null;
 
     const handleSaveProduct = async () => {
 
@@ -34,7 +45,8 @@ export default function ProductAddForm() {
 
         const response = await axios.post(`${serverURL}/product/`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data' // Set content type to multipart/form-data
+                'Content-Type': 'multipart/form-data', // Set content type to multipart/form-data
+                'Authorization': `bearer ${accessToken === null ? '' : accessToken}`,
             }
         });
 
@@ -42,10 +54,22 @@ export default function ProductAddForm() {
 
         if (response.data.success) {
             setIsLoading(false);
-            alert('Saved product successfully');
+            MySwal.fire({
+                title: <p>Saved product successfully.</p>,
+                icon: 'success',
+                timer: 3000,
+                timerProgressive: true,
+            }).then(() => {
+            })
         } else {
             setIsLoading(false);
-            alert(response.data.message);
+            MySwal.fire({
+                title: <p>{response.data.message}</p>,
+                icon: 'error',
+                timer: 3000,
+                timerProgressive: true,
+            }).then(() => {
+            })
         }
     }
 
