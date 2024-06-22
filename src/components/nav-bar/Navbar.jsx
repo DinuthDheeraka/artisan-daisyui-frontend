@@ -1,8 +1,12 @@
 import {Link, useNavigate} from "react-router-dom";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
+// eslint-disable-next-line react/prop-types
 export default function Navbar({handleFilterChange, handleIconOnClick}) {
 
     const navigate = useNavigate();
+    const MySwal = withReactContent(Swal)
 
     // Get the JSON string from local storage
     const retrievedString = localStorage.getItem('user_data');
@@ -94,19 +98,24 @@ export default function Navbar({handleFilterChange, handleIconOnClick}) {
                         </li>
                         {userData.accountType === "Seller" ?
                             <li><Link to={'/product-save'}>Add product</Link></li> : undefined}
+                        <li><Link to={'/cart'}>Cart</Link></li>
                         <li><a>Settings</a></li>
                         <li onClick={() => {
                             // Display the confirmation dialog
-                            const userConfirmed = confirm("Are you sure you want to logout?");
-
-                            // Check the user's response
-                            if (userConfirmed) {
-                                // The user clicked "OK"
-                                localStorage.clear();
-                                navigate("/login");
-                            } else {
-                                // The user clicked "Cancel"
-                            }
+                            MySwal.fire({
+                                title: <p className={'text-base text-black'}>Do you need to logout!</p>,
+                                confirmButtonColor: '#151515',
+                                confirmButtonText:'Yes',
+                                showCancelButton:true,
+                                cancelButtonColor:'#ff3e3e',
+                                cancelButtonText:'No',
+                            }).then(res => {
+                                if (res.isConfirmed) {
+                                    // The user clicked "OK"
+                                    localStorage.clear();
+                                    navigate("/login");
+                                }
+                            });
 
                         }}><a>Logout</a></li>
                     </ul>

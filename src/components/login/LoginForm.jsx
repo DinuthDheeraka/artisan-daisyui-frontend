@@ -2,12 +2,15 @@ import {Link, useNavigate} from "react-router-dom";
 import {useState} from "react";
 import axios from "axios";
 import serverURL from "../../config/server-config.js"
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function LoginForm() {
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const navigate = useNavigate();
+    const MySwal = withReactContent(Swal)
 
     const handleLogin = async () => {
 
@@ -16,7 +19,16 @@ export default function LoginForm() {
         });
 
         if (response.data.success) {
-            alert('Login successful.');
+
+            MySwal.fire({
+                title: <p className={'text-base text-black'}>Login successful</p>,
+                icon: 'success',
+                timer: 2000,
+                confirmButtonColor: '#161616',
+                timerProgressive: true,
+            }).then(() => {
+                // return MySwal.fire(<p>Shorthand works too</p>)
+            })
 
             // put response data in local storage
             localStorage.setItem("user_data", JSON.stringify({
@@ -26,7 +38,14 @@ export default function LoginForm() {
 
             navigate("/home");
         } else {
-            alert(response.data.message);
+            MySwal.fire({
+                title: <p className={'text-base text-black'}>{response.data.message}</p>,
+                icon: 'error',
+                timer: 3000,
+                confirmButtonColor: '#161616',
+                timerProgressive: true,
+            }).then(() => {
+            })
         }
 
     }

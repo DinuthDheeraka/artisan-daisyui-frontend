@@ -3,6 +3,8 @@ import {useNavigate} from "react-router-dom";
 import axios from "axios";
 import serverURL from "../../config/server-config.js";
 import LoaderButton from "../loader-button/LoaderButton.jsx";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 
 export default function SignupForm() {
 
@@ -13,6 +15,7 @@ export default function SignupForm() {
     const [isLoading, setIsLoading] = useState(false);
     const [accountType, setSelectedAccountType] = useState('Buyer');
     const navigate = useNavigate();
+    const MySwal = withReactContent(Swal)
 
     const handleSignUp = async () => {
 
@@ -26,7 +29,15 @@ export default function SignupForm() {
 
             setIsLoading(false);
 
-            alert('Login successful.');
+            MySwal.fire({
+                title: <p>Sign up successful.</p>,
+                icon: 'success',
+                showConfirmButton: true,
+                timer: 3000,
+                timerProgressive: true,
+            }).then(() => {
+                // return MySwal.fire(<p>Shorthand works too</p>)
+            })
 
             // put response data in local storage
             localStorage.setItem("user_data", JSON.stringify({
@@ -37,7 +48,17 @@ export default function SignupForm() {
             navigate("/home");
         } else {
             setIsLoading(false);
-            alert(response.data.message);
+
+            MySwal.fire({
+                title: <p>Sign up failed</p>,
+                text: `${response.data.message}`,
+                icon: 'error',
+                showConfirmButton: true,
+                timer: 3000,
+                timerProgressive: true,
+            }).then(() => {
+                // return MySwal.fire(<p>Shorthand works too</p>)
+            })
         }
     }
 
