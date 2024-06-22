@@ -1,11 +1,13 @@
-import GooglePayButton from "@google-pay/button-react";
 import {useEffect, useState} from "react";
 import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from 'sweetalert2-react-content'
 
 // eslint-disable-next-line react/prop-types
 export default function ProductOverview({id}) {
 
-    const [qty, setQTY] = useState(0);
+    const MySwal = withReactContent(Swal)
+    const [qty, setQTY] = useState(1);
     const [product, setProduct] = useState({
         name: '',
         price: 0,
@@ -63,7 +65,7 @@ export default function ProductOverview({id}) {
 
             <div className='w-1/2 flex flex-col items-start justify-start px-5 gap-6' style={{height: '660px'}}>
 
-                <p className={'text-3xl font-medium'}>{product.name}</p>
+                <p className={'text-3xl font-semibold'}>{product.name.toUpperCase()}</p>
 
                 <p className={'text-xl font-semibold'}>LKR {product.price.toLocaleString()}</p>
 
@@ -82,60 +84,78 @@ export default function ProductOverview({id}) {
 
                 <div className={'flex flex-row items-center justify-center gap-3.5'}>
                     <button onClick={() => {
+                        if (qty > 1) {
+                            setQTY(prevState => prevState - 1);
+                        }
+                    }} className={'btn btn-sm'}>-
+                    </button>
+                    <p className={'text-sm'}>{qty}</p>
+                    <button onClick={() => {
                         if (qty < product.qty) {
                             setQTY(prevState => prevState + 1);
                         }
                     }} className={'btn btn-sm'}>+
                     </button>
-                    <p className={'text-sm'}>{qty}</p>
-                    <button onClick={() => {
-                        if (qty > product.qty) {
-                            setQTY(prevState => prevState - 1);
-                        }
-                    }} className={'btn btn-sm'}>-
-                    </button>
                 </div>
 
                 <div className="w-72 h-60 mt-10">
-                    <GooglePayButton
-                        buttonSizeMode={"fill"}
-                        className='w-full'
-                        environment="TEST"
-                        paymentRequest={{
-                            apiVersion: 2,
-                            apiVersionMinor: 0,
-                            allowedPaymentMethods: [
-                                {
-                                    type: 'CARD',
-                                    parameters: {
-                                        allowedAuthMethods: ['PAN_ONLY', 'CRYPTOGRAM_3DS'],
-                                        allowedCardNetworks: ['MASTERCARD', 'VISA'],
-                                    },
-                                    tokenizationSpecification: {
-                                        type: 'PAYMENT_GATEWAY',
-                                        parameters: {
-                                            gateway: 'example',
-                                            gatewayMerchantId: 'exampleGatewayMerchantId',
-                                        },
-                                    },
-                                },
-                            ],
-                            merchantInfo: {
-                                merchantId: '12345678901234567890',
-                                merchantName: 'Demo Merchant',
-                            },
-                            transactionInfo: {
-                                totalPriceStatus: 'FINAL',
-                                totalPriceLabel: 'Total',
-                                totalPrice: '100.00',
-                                currencyCode: 'USD',
-                                countryCode: 'US',
-                            },
-                        }}
-                        onLoadPaymentData={paymentRequest => {
-                            console.log('load payment data', paymentRequest);
-                        }}
-                    />
+                    <button onClick={() => {
+                        MySwal.fire({
+                            title: <p className={'text-xl text-black'}>Do you want to add this item to the cart!</p>,
+                            html: `<!--<div class="flex-col gap-3"><p class="text-base font-semibold">${product.name}</p><p class="text-base text-black font-light">Quantity : ${qty}</p></div>-->`,
+                            icon: 'info',
+                            showCancelButton: true,
+                            confirmButtonColor: '#0e0e0e',
+                            confirmButtonText: 'Yes',
+                            cancelButtonText: 'No',
+                            cancelButtonColor: '#ff3434',
+                            showConfirmButton: true,
+                        }).then(r => {
+                            console.log(r)
+                            if (r.isConfirmed) {
+
+                                // add item to the cart
+                                let cart = localStorage.getItem('cart');
+                                if (cart) {
+
+                                    cart = JSON.parse(cart);
+
+                                    if (cart.length >= 0) {
+                                        cart.push({
+                                            id: product._id,
+                                            name: product.name,
+                                            size: product.size,
+                                            price: product.price,
+                                            qty: product.qty,
+                                            selectedQty: qty,
+                                            image: product.img1
+                                        });
+
+                                        localStorage.setItem('cart', JSON.stringify(cart));
+                                    }
+
+                                } else {
+                                    localStorage.setItem('cart', JSON.stringify([{
+                                        id: product._id,
+                                        name: product.name,
+                                        category: product.size,
+                                        price: product.price,
+                                        qty: product.qty,
+                                        selectedQty: qty,
+                                        image: product.img1
+                                    }]))
+                                }
+
+                                return MySwal.fire({
+                                    title: <p className={'text-xl text-black'}>Added item successfully.</p>,
+                                    icon: 'success',
+                                    timer: 3000,
+                                    confirmButtonColor: '#161616',
+                                })
+                            }
+                        });
+                    }} className="btn w-full text-base btn-neutral">Add to cart
+                    </button>
                 </div>
             </div>
 

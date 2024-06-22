@@ -5,10 +5,14 @@ import ProductOverviewPage from "./pages/product-overview-page/ProductOverviewPa
 import LoginPage from "./pages/login-page/LoginPage.jsx";
 import SignUpPage from "./pages/sign-up-page/SignUpPage.jsx";
 import ProductAddPage from "./pages/product-add-page/ProductAddPage.jsx";
+import CartPage from "./pages/cart-page/CartPage.jsx";
 
 const router = createBrowserRouter([
     {
         path: '/home', element: <HomePage/>
+    },
+    {
+        path: '/cart', element: <CartPage/>
     },
     {
         path: '/product/*', element: <ProductOverviewPage/>
