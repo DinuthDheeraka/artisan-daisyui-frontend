@@ -5,11 +5,40 @@ import {Link} from "react-router-dom";
 import {useState} from "react";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import axios from "axios";
+import serverURL from "../../config/server-config.js"
 
 export default function CartPage() {
 
     const [isCartChanged, setIsCartChanged] = useState(false)
     const MySwal = withReactContent(Swal)
+
+    const saveOrder = async () => {
+        try {
+            let items = localStorage.getItem('cart');
+            items = items ? JSON.parse(items) : [];
+
+            const retrievedString = localStorage.getItem('user_data');
+            const retrievedObject = JSON.parse(retrievedString);
+            const accessToken = retrievedObject ? retrievedObject.tokens.accessToken : null;
+            const user = retrievedObject ? retrievedObject.user : {};
+
+            const response = await axios.post(`${serverURL}/order`,
+                {
+                    user, items
+                }, {
+                    headers: {
+                        'Content-Type': 'application/json', // Set content type to multipart/form-data
+                        'Authorization': `bearer ${accessToken === null ? '' : accessToken}`,
+                    }
+                });
+
+            return response.data;
+
+        } catch (e) {
+            console.log(e)
+        }
+    }
 
     function changeCartState(value) {
         setIsCartChanged((prevState) => !prevState);
@@ -127,21 +156,40 @@ export default function CartPage() {
                                 },
                             }}
                             onLoadPaymentData={paymentRequest => {
-                                console.log('load payment data', paymentRequest);
-                                MySwal.fire({
-                                    title: <p>Checkout successful</p>,
-                                    html: <div className={'flex-col'}>
-                                        <p className={''}>Your order has been placed successfully.</p>
-                                        <p className={'pt-2'}>Your items will be delivered within 4 working days.</p>
-                                    </div>,
-                                    icon: 'success',
-                                    confirmButtonColor: '#151515'
-                                }).then(r => {
-                                    console.log(r);
-                                });
 
-                                localStorage.setItem('cart', JSON.stringify([]));
-                                changeCartState(true)
+                                console.log('load payment data', paymentRequest);
+
+                                saveOrder().then(r => {
+                                    if (r.success) {
+                                        MySwal.fire({
+                                            title: <p className={'text-xl text-black'}>Checkout successful</p>,
+                                            html: <div className={'flex-col'}>
+                                                <p className={'text-base'}>Your order has been placed successfully.</p>
+                                                <p className={'text-base pt-2'}>Your items will be delivered within 4
+                                                    working
+                                                    days.</p>
+                                            </div>,
+                                            icon: 'success',
+                                            confirmButtonColor: '#151515'
+                                        }).then(r => {
+                                            console.log(r);
+                                        });
+
+                                        localStorage.setItem('cart', JSON.stringify([]));
+                                        changeCartState(true)
+                                    } else {
+                                        MySwal.fire({
+                                            title: <p className={'text-xl text-black'}>Checkout was failed!</p>,
+                                            html: <div className={'flex-col'}>
+                                                <p className={'text-base'}>Please try again later.</p>
+                                            </div>,
+                                            icon: 'error',
+                                            confirmButtonColor: '#151515'
+                                        }).then(r => {
+                                            console.log(r);
+                                        });
+                                    }
+                                });
 
                             }}
                         />

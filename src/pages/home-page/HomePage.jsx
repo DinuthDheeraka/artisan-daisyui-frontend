@@ -3,6 +3,7 @@ import CardContainer from "../../components/card-container/CardContainer.jsx";
 import Footer from "../../components/footer/Footer.jsx";
 import HomeCarousel from "../../components/home-carousel/HomeCarousel.jsx";
 import {useState} from "react";
+import HomeLoadingSkeleton from "../../components/home-loading-skelton/HomeLoadingSkeleton.jsx";
 
 export default function HomePage() {
 
