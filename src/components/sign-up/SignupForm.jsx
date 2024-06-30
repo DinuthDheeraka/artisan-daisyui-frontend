@@ -30,10 +30,10 @@ export default function SignupForm() {
             setIsLoading(false);
 
             MySwal.fire({
-                title: <p>Sign up successful.</p>,
+                title: <p className={'text-base text-black'}>Sign up successful</p>,
                 icon: 'success',
-                showConfirmButton: true,
-                timer: 3000,
+                timer: 2000,
+                confirmButtonColor: '#161616',
                 timerProgressive: true,
             }).then(() => {
                 // return MySwal.fire(<p>Shorthand works too</p>)

@@ -6,6 +6,8 @@ import LoginPage from "./pages/login-page/LoginPage.jsx";
 import SignUpPage from "./pages/sign-up-page/SignUpPage.jsx";
 import ProductAddPage from "./pages/product-add-page/ProductAddPage.jsx";
 import CartPage from "./pages/cart-page/CartPage.jsx";
+import MyOrdersPage from "./pages/my-orders-page/MyOrdersPage.jsx";
+import OrderDetailsPage from "./pages/order-details-page/OrderDetailsPage.jsx";
 
 const router = createBrowserRouter([
     {
@@ -25,6 +27,12 @@ const router = createBrowserRouter([
     },
     {
         path: '/product-save', element: <ProductAddPage/>
+    },
+    {
+        path: '/my-orders', element: <MyOrdersPage/>
+    },
+    {
+        path: '/order-detail/*', element: <OrderDetailsPage/>
     },
 ])
 

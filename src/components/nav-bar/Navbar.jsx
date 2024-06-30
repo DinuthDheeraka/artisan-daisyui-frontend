@@ -55,7 +55,7 @@ export default function Navbar({handleFilterChange, handleIconOnClick}) {
                     }}>Men</a></li>
                     <li><a className="text-sm font-medium" onClick={() => {
                         handleFilterChange({
-                            gender: 'Women'
+                            gender: 'Female'
                         });
                     }}>Women</a></li>
                     <li>
@@ -99,16 +99,17 @@ export default function Navbar({handleFilterChange, handleIconOnClick}) {
                         {userData.accountType === "Seller" ?
                             <li><Link to={'/product-save'}>Add product</Link></li> : undefined}
                         <li><Link to={'/cart'}>Cart</Link></li>
+                        <li><Link to={'/my-orders'}>My orders</Link></li>
                         <li><a>Settings</a></li>
                         <li onClick={() => {
                             // Display the confirmation dialog
                             MySwal.fire({
                                 title: <p className={'text-base text-black'}>Do you need to logout!</p>,
                                 confirmButtonColor: '#151515',
-                                confirmButtonText:'Yes',
-                                showCancelButton:true,
-                                cancelButtonColor:'#ff3e3e',
-                                cancelButtonText:'No',
+                                confirmButtonText: 'Yes',
+                                showCancelButton: true,
+                                cancelButtonColor: '#ff3e3e',
+                                cancelButtonText: 'No',
                             }).then(res => {
                                 if (res.isConfirmed) {
                                     // The user clicked "OK"

@@ -1,5 +1,6 @@
 import {useState} from "react";
 
+// eslint-disable-next-line react/prop-types
 export default function CartItem({id, image, name, price, size, qty, selectedQty, changeCartState}) {
 
     let cart = localStorage.getItem('cart');

@@ -55,20 +55,24 @@ export default function ProductAddForm() {
         if (response.data.success) {
             setIsLoading(false);
             MySwal.fire({
-                title: <p>Saved product successfully.</p>,
+                title: <p className={'text-base text-black'}>Saved product successfully.</p>,
                 icon: 'success',
-                timer: 3000,
+                timer: 2000,
+                confirmButtonColor: '#161616',
                 timerProgressive: true,
             }).then(() => {
+                // return MySwal.fire(<p>Shorthand works too</p>)
             })
         } else {
             setIsLoading(false);
             MySwal.fire({
-                title: <p>{response.data.message}</p>,
+                title: <p className={'text-base text-black'}>{response.data.message}</p>,
                 icon: 'error',
-                timer: 3000,
+                timer: 4000,
+                confirmButtonColor: '#161616',
                 timerProgressive: true,
             }).then(() => {
+                // return MySwal.fire(<p>Shorthand works too</p>)
             })
         }
     }
